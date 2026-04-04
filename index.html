@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Refiner - Free Online Bulk Text Removal Tool</title>
+    <meta name="description" content="Efficiently remove specific phrases, keywords, or multiple lines of text from your large content blocks. Content Refiner is a professional, free tool for editors and writers.">
+    <meta name="keywords" content="text refiner, remove text, bulk text editor, content cleaning tool, remove phrases online, SEO content tool">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Kanit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+       
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg-color: #ffffff;
+            --secondary-bg: #f9fafb;
+            /* เปลี่ยนจากสีเทาเข้มเป็นดำสนิท */
+            --text-dark: #000000; 
+            /* เปลี่ยนจากสีเทาอ่อนเป็นดำสนิท หรือดำจางลงนิดเดียวเพื่อให้ยังดูซอฟต์ */
+            --text-light: #000000; 
+            --border: #e5e7eb;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* ใช้ Inter เป็นหลักสำหรับ English และ Kanit สำหรับ Thai/Fallback */
+            font-family: 'Inter', 'Kanit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark); /* ใช้สีดำสนิทที่ตั้งไว้ใน root */
+            /* ปรับปรุงการแสดงผลฟอนต์ไทยให้คมชัดขึ้น */
+            -webkit-font-smoothing: antialiased;
+
+            /* ปรับขนาดฟอนต์พื้นฐานให้ใหญ่ขึ้น */
+            font-size: 18px; 
+            color: #000000;
+            line-height: 1.7; /* เพิ่มระยะห่างระหว่างบรรทัดให้ภาษาไทยไม่เบียดกัน */
+        }
+
+        /* หากต้องการเน้นหัวข้อ (Heading) ให้เป็น Kanit ทั้งหมดเพื่อให้ดู Modern */
+        h1, h2, h3, .btn-submit, .lang-btn {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 500; /* น้ำหนักกำลังดีสำหรับ Kanit */
+        }
+
+        /* เน้นย้ำส่วนของหัวข้อและบทความให้เป็นสีดำ */
+        h1, h2, h3, p, li, label, .description {
+            color: #000000 !important;
+        }
+
+        /* ส่วนหัวข้อหลัก */
+        header h1 {
+            font-size: 2.8rem; /* ใหญ่ขึ้นเพื่อความชัดเจน */
+            font-weight: 700;
+        }
+
+        /* ส่วนหัวข้อรองในบทความ */
+        .content-section h2 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+        }
+
+        .content-section h3 {
+            font-size: 1.5rem;
+        }
+
+        /* ส่วนเนื้อหาในบทความ (Article Body) */
+        .content-section p, .content-section li {
+            font-size: 1.15rem; /* ขยายขนาดเนื้อหาให้อ่านง่าย */
+        }
+
+        /* ปรับแต่ง Textarea และ Input ให้ใช้ Kanit ด้วยเพื่อให้ภาษาไทยอ่านง่าย */
+        /* ส่วนของ Textarea และ Input ให้ตัวหนังสือที่พิมพ์เป็นสีดำสนิท */
+        textarea, input[type="text"], #output {
+            color: #000000;
+            font-family: 'Inter', 'Kanit', sans-serif;
+            font-size: 1.1rem; /* ให้ตัวหนังสือที่พิมพ์และผลลัพธ์มีขนาดใหญ่ */
+            line-height: 1.6;
+        }
+
+
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        /* Tool Section */
+        .tool-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            
+            /* ปรับขนาด Label ของฟอร์ม */
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+ 
+        textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border 0.2s;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .small-area { height: 100px; }
+        .large-area { height: 250px; }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Result Area */
+        #resultWrapper {
+            margin-top: 30px;
+            display: none;
+            border-top: 2px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .result-title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .copy-btn {
+            background: #f3f4f6;
+            border: 1px solid var(--border);
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #e5e7eb;
+        }
+
+        #output {
+            background: var(--secondary-bg);
+            padding: 20px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            border: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        /* Content Section */
+        .content-section {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            color: var(--text-light);
+        }
+
+        .content-section h2 {
+            font-family: 'Kanit', sans-serif;
+            color: var(--text-dark);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .content-section h3 {
+            font-family: 'Kanit', sans-serif;
+            color: var(--text-dark);
+            font-size: 1.3rem;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        .content-section p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .content-section ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        .content-section li {
+            margin-bottom: 10px;
+        }
+
+        .content-section strong {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+            .tool-card { padding: 20px; }
+        }
+
+        .site-footer {
+            margin-top: 80px;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1rem; /* ปรับ Footer ให้ไม่อันเล็กจนเกินไป */
+        }
+
+        .footer-content p {
+            margin-bottom: 8px;
+        }
+
+        .footer-content strong {
+            color: var(--text-dark);
+        }
+
+        .license-info {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* ส่วนของ Footer (ถ้าเดิมเป็นสีเทา ให้ปรับเป็นดำ) */
+        .site-footer, .license-info {
+            color: #000000;
+            opacity: 1; /* ยกเลิกความโปร่งใสเพื่อให้ดำชัดเจน */
+        }
+
+        .footer-links {
+            margin-top: 15px;
+        }
+
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* ปรับแต่งให้ดูดีในมือถือ */
+        @media (max-width: 600px) {
+            .site-footer {
+                margin-top: 50px;
+                padding: 30px 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                font-size: 17px; /* ลดขนาดลงเล็กน้อยบนมือถือ */
+            }
+            header h1 {
+                font-size: 2.2rem;
+            }
+            .content-section h2 {
+                font-size: 1.7rem;
+            }
+        }
+
+        /* Language Switcher Styles */
+        .lang-switch {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .lang-btn {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            color: var(--text-light);
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .lang-btn:hover:not(.active) {
+            background: var(--secondary-bg);
+        }
+        
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLanguage('en')" id="btn-en">EN</button>
+        <button class="lang-btn" onclick="setLanguage('th')" id="btn-th">TH</button>
+    </div>
+    <header>
+        <h1 data-i18n="header-title">Content Refiner</h1>
+        <p data-i18n="header-desc">The ultimate text cleaning utility for professional editors.</p>
+    </header>
+
+    <main class="tool-card">
+        <div class="form-group">
+            <label for="blacklist" data-i18n="label-blacklist">Phrases to Remove (One per line)</label>
+            <textarea id="blacklist" class="small-area" data-i18n-placeholder="placeholder-blacklist"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="mainContent" data-i18n="label-main">Main Content Body</label>
+            <textarea id="mainContent" class="large-area" data-i18n-placeholder="placeholder-main"></textarea>
+        </div>
+
+        <button onclick="refineContent()" class="btn-submit" id="submitBtn" data-i18n="btn-refine">Refine Text Now</button>
+        
+        <div id="resultWrapper">
+            <div class="result-title-bar">
+                <strong data-i18n="result-label">Cleaned Result:</strong>
+                <button class="copy-btn" onclick="copyToClipboard()" id="copyBtn" data-i18n="btn-copy">Copy Result</button>
+            </div>
+            <div id="output"></div>
+        </div>
+    </main>
+
+    <article class="content-section" id="article-body">
+    </article>
+
+    <!--<article class="content-section">
+        <h2>Professional Text Editing Tool</h2>
+        <p>Welcome to <strong>Content Refiner</strong>, a powerful and free online utility designed to help writers, developers, and SEO specialists clean their text data efficiently. Whether you need to remove repetitive phrases, specific signatures, or unwanted lines from a massive dataset, our tool provides a seamless experience.</p>
+
+        <h3>Why use Content Refiner?</h3>
+        <p>Manual editing can take hours. With Content Refiner, you can automate the process of "cutting" unwanted segments from your text. This tool is specifically built to handle large volumes of content without slowing down your browser.</p>
+        
+        <ul>
+            <li><strong>Bulk Removal:</strong> Paste multiple phrases to remove them all at once.</li>
+            <li><strong>Precision:</strong> Matches exact phrases to ensure your content remains intact.</li>
+            <li><strong>Privacy First:</strong> All processing happens locally in your browser (JavaScript). Your data is never sent to a server.</li>
+            <li><strong>SEO Friendly:</strong> Perfect for cleaning up metadata, scraped content, or repetitive boilerplate text.</li>
+        </ul>
+
+        <h3>How to use Content Refiner</h3>
+        <p>1. <strong>Identify Unwanted Text:</strong> Enter the specific phrases or lines you want to delete into the first box. Each phrase should be on a new line.</p>
+        <p>2. <strong>Paste Your Content:</strong> Put your large article or data block into the second, larger box.</p>
+        <p>3. <strong>Execute:</strong> Click "Refine Text Now" or simply press <strong>Enter</strong> while typing in the input fields.</p>
+        <p>4. <strong>Export:</strong> Use the "Copy" button to instantly grab your cleaned content.</p>
+
+        <h3>Technical Performance</h3>
+        <p>Our algorithm uses optimized JavaScript string manipulation to ensure that even text with tens of thousands of words is processed in milliseconds. The responsive design ensures you can refine your content on the go using a mobile device or a desktop workstation.</p>
+    </article>-->
+
+
+<footer class="site-footer">
+    <div class="footer-content">
+        <p>&copy; 2026 <a href="https://www.facebook.com/pwiwat"><strong><span data-i18n="footer-author">WIWAT PHATANASRIRAT</span></strong></a> | 
+            Content Refiner. <span data-i18n="footer-rights">All Rights Reserved.</span></p>
+        <p class="license-info">
+            <span data-i18n="footer-license">This project is open-source under the</span> 
+            <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.
+        </p>
+        <div class="footer-links">
+            <a href="https://github.com/YOUR-USERNAME/content-refiner" target="_blank" rel="noopener">
+                <span data-i18n="footer-github">View on GitHub</span>
+            </a>
+        </div>
+    </div>
+</footer>
+
+</div>
+
+<script>
+    // Submit on Enter Key
+    document.addEventListener('keydown', function(event) {
+        // If Enter is pressed AND we aren't just trying to make a new line in a textarea
+        // Note: Usually in a textarea, Enter is for new line. 
+        // For a better UX, let's use Ctrl+Enter or Cmd+Enter to submit
+        if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+            refineContent();
+        }
+    });
+
+    // Alternatively, if you want just "Enter" to submit from the phrase box:
+    document.getElementById('blacklist').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            // Uncomment the next line if you want Enter to trigger submit instead of new line
+            // e.preventDefault(); refineContent();
+        }
+    });
+
+    function refineContent() {
+        const blacklist = document.getElementById('blacklist').value.split('\n').filter(line => line.trim() !== '');
+        let mainContent = document.getElementById('mainContent').value;
+        const resultWrapper = document.getElementById('resultWrapper');
+        const output = document.getElementById('output');
+
+        if (!mainContent) {
+            alert("Please paste some content to refine.");
+            return;
+        }
+
+        // Processing
+        let refined = mainContent;
+        blacklist.forEach(phrase => {
+            if(phrase.trim() !== "") {
+                // Escape special characters for Regex
+                const escapedPhrase = phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(escapedPhrase, 'g');
+                refined = refined.replace(regex, '');
+            }
+        });
+
+        // Update UI
+        output.innerText = refined;
+        resultWrapper.style.display = 'block';
+        
+        // Scroll to result smoothly
+        resultWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function copyToClipboard() {
+        const text = document.getElementById('output').innerText;
+        const btn = document.getElementById('copyBtn');
+
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = btn.innerText;
+            btn.innerText = "Copied!";
+            btn.style.background = "#d1fae5";
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.background = "#f3f4f6";
+            }, 2000);
+        });
+    }
+
+    const translations = {
+        en: {
+            "header-title": "Content Refiner",
+            "header-desc": "The ultimate text cleaning utility for professional editors.",
+            "label-blacklist": "Phrases to Remove (One per line)",
+            "placeholder-blacklist": "Enter words or lines you want to delete...",
+            "label-main": "Main Content Body",
+            "placeholder-main": "Paste your large text here...",
+            "btn-refine": "Refine Text Now",
+            "result-label": "Cleaned Result:",
+            "btn-copy": "Copy Result",
+            "footer-rights": "All Rights Reserved.",
+            "footer-license": "This project is open-source under the",
+            "footer-github": "View on GitHub",
+            "footer-author": "WIWAT PHATANASRIRAT",
+            
+            // ... (ส่วนแปลอื่นๆ เหมือนเดิม)
+            "alert-empty": "Please paste some content to refine.",
+            "copy-success": "Copied!",
+            
+            // เนื้อหาบทความฉบับภาษาอังกฤษ
+            "article-html": `
+                <h2>Professional Text Refining Solutions</h2>
+                <p>Welcome to <strong>Content Refiner</strong>, a sophisticated web utility designed for high-precision text manipulation. This tool empowers editors and creators to polish their writing by eliminating repetitive fragments and unwanted noise instantly.</p>
+                
+                <h3>Why Choose Content Refiner?</h3>
+                <ul>
+                    <li><strong>Efficiency:</strong> Process thousands of words in a fraction of a second.</li>
+                    <li><strong>Local Security:</strong> Your data remains in your browser; we never upload your text to any server.</li>
+                    <li><strong>Clean Output:</strong> Get a perfectly stripped version of your text, ready for publishing.</li>
+                </ul>
+
+                <h3>Getting Started</h3>
+                <p>Simply list the phrases you wish to remove in the upper box, paste your source text in the larger area, and let the algorithm do the heavy lifting for you.</p>
+            `
+        },
+        th: {
+            "header-title": "Content Refiner",
+            "header-desc": "เครื่องมือขัดเกลาและตัดข้อความอัจฉริยะสำหรับมืออาชีพ",
+            "label-blacklist": "ข้อความที่ต้องการตัดออก (หนึ่งรายการต่อบรรทัด)",
+            "placeholder-blacklist": "กรอกคำหรือประโยคที่ต้องการลบ...",
+            "label-main": "เนื้อหาหลัก",
+            "placeholder-main": "วางข้อความขนาดใหญ่ของคุณที่นี่...",
+            "btn-refine": "ประมวลผลข้อความ",
+            "result-label": "ผลลัพธ์ที่ได้:",
+            "btn-copy": "คัดลอกผลลัพธ์",
+            "footer-rights": "สงวนลิขสิทธิ์ตามกฎหมาย",
+            "footer-license": "โปรเจกต์นี้เป็นโอเพนซอร์ซภายใต้",
+            "footer-github": "ดูบน GitHub",
+            "footer-author": "วิวัฒน์ พัฒนาศรีรัตน์",
+            
+            // ... (ส่วนแปลอื่นๆ เหมือนเดิม)
+            "alert-empty": "กรุณาวางข้อความที่ต้องการประมวลผล",
+            "copy-success": "คัดลอกแล้ว!",
+            
+            // เนื้อหาบทความฉบับภาษาไทย
+            "article-html": `
+                <h2>โซลูชันการขัดเกลาข้อความระดับมืออาชีพ</h2>
+                <p>ยินดีต้อนรับสู่ <strong>Content Refiner</strong> เครื่องมือเว็บแอปพลิเคชันที่ออกแบบมาเพื่อการจัดการข้อความที่มีความแม่นยำสูง ช่วยให้บรรณาธิการและผู้สร้างสรรค์คอนเทนต์สามารถปรับปรุงงานเขียนได้ทันที โดยการกำจัดส่วนเกินและข้อความที่ไม่ต้องการออกไป</p>
+                
+                <h3>ทำไมต้องเลือกใช้ Content Refiner?</h3>
+                <ul>
+                    <li><strong>ประสิทธิภาพสูง:</strong> ประมวลผลข้อความนับพันคำได้ในเสี้ยววินาที</li>
+                    <li><strong>ความปลอดภัยสูงสุด:</strong> ข้อมูลของคุณจะถูกเก็บไว้ในเบราว์เซอร์เท่านั้น ไม่มีการอัปโหลดเนื้อหาไปยังเซิร์ฟเวอร์ใดๆ</li>
+                    <li><strong>ผลลัพธ์ที่สะอาดตา:</strong> รับข้อความที่ผ่านการคัดกรองแล้ว พร้อมสำหรับการนำไปใช้งานหรือตีพิมพ์ต่อได้ทันที</li>
+                </ul>
+
+                <h3>เริ่มต้นใช้งาน</h3>
+                <p>เพียงระบุวลีที่ต้องการลบในกล่องด้านบน วางเนื้อหาต้นฉบับของคุณในกล่องขนาดใหญ่ และให้ระบบอัลกอริทึมจัดการส่วนที่เหลือให้คุณอย่างง่ายดาย</p>
+            `
+        }
+    };
+
+    function setLanguage(lang) {
+        // บันทึกภาษาที่เลือกลง localStorage
+        localStorage.setItem('preferredLang', lang);
+        
+        // จัดการสถานะปุ่ม Active
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`btn-${lang}`).classList.add('active');
+
+        // แปลข้อความที่มี data-i18n
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang][key]) el.innerText = translations[lang][key];
+        });
+
+        // แปล Placeholder
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (translations[lang][key]) el.placeholder = translations[lang][key];
+        });
+
+        // Update SEO Content (Inner HTML)
+        //document.getElementById('seo-content').innerHTML = translations[lang]['seo-html'];
+
+        // --- ส่วนที่ปรับปรุงใหม่: ฉีดเนื้อหาเข้า Article ---
+        const articleArea = document.getElementById('article-body');
+        if (articleArea) {
+            articleArea.innerHTML = translations[lang]['article-html'];
+        }
+    }
+
+    
+    // เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเว็บ
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('preferredLang') || 'en';
+        setLanguage(savedLang);
+    });
+
+    // แก้ไขฟังก์ชัน copyToClipboard และ refineContent ให้ใช้คำแปลจากภาษาที่เลือก
+    // เช่น alert(translations[currentLang]['alert-empty']);
+</script>
+
+</body>
+</html>
