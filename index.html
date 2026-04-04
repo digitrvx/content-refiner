@@ -11,7 +11,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Kanit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <!--<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Kanit:wght@200;300;400;500;600&display=swap" rel="stylesheet">-->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@100..900&display=swap" rel="stylesheet">
 
     <link rel="icon" type="image/png" href="img/favicon-96x96.png" sizes="96x96" />
@@ -43,7 +43,7 @@
 
         body {
             /* ใช้ Inter เป็นหลักสำหรับ English และ Kanit สำหรับ Thai/Fallback */
-            font-family: 'Inter', 'Kanit', sans-serif;
+            font-family: 'Inter', 'Noto+Sans+Thai+Looped', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-dark); /* ใช้สีดำสนิทที่ตั้งไว้ใน root */
             /* ปรับปรุงการแสดงผลฟอนต์ไทยให้คมชัดขึ้น */
@@ -57,7 +57,7 @@
 
         /* หากต้องการเน้นหัวข้อ (Heading) ให้เป็น Kanit ทั้งหมดเพื่อให้ดู Modern */
         h1, h2, h3, .btn-submit, .lang-btn {
-            font-family: 'Kanit', sans-serif;
+            font-family: 'Noto+Sans+Thai+Looped', sans-serif;
             font-weight: 500; /* น้ำหนักกำลังดีสำหรับ Kanit */
         }
 
@@ -91,7 +91,7 @@
         /* ส่วนของ Textarea และ Input ให้ตัวหนังสือที่พิมพ์เป็นสีดำสนิท */
         textarea, input[type="text"], #output {
             color: #000000;
-            font-family: 'Inter', 'Kanit', sans-serif;
+            font-family: 'Inter', 'Noto+Sans+Thai+Looped', sans-serif;
             font-size: 1.1rem; /* ให้ตัวหนังสือที่พิมพ์และผลลัพธ์มีขนาดใหญ่ */
             line-height: 1.6;
         }
@@ -228,14 +228,14 @@
         }
 
         .content-section h2 {
-            font-family: 'Kanit', sans-serif;
+            font-family: 'Noto+Sans+Thai+Looped', sans-serif;
             color: var(--text-dark);
             font-size: 1.8rem;
             margin-bottom: 20px;
         }
 
         .content-section h3 {
-            font-family: 'Kanit', sans-serif;
+            font-family: 'Noto+Sans+Thai+Looped', sans-serif;
             color: var(--text-dark);
             font-size: 1.3rem;
             margin-top: 30px;
@@ -411,7 +411,11 @@
             <span data-i18n="footer-license">This project is open-source under the</span> 
             <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.
         </p>
-       
+        <div class="footer-links">
+            <a href="https://github.com/digitrvx/content-refiner" target="_blank" rel="noopener">
+                <span data-i18n="footer-github">View on GitHub</span>
+            </a>
+        </div>
     </div>
 </footer>
 
