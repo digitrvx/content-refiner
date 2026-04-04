@@ -3,7 +3,7 @@
 
 Content Refiner is a lightweight, privacy-focused web application designed to help editors, developers, and content creators clean up large blocks of text by removing specific unwanted phrases or multiple lines instantly.
 
-[Live](https://digitrvx.github.io/content-refiner/) ---
+[Go to Live](https://digitrvx.github.io/content-refiner/) ---
 
 ## 🚀 Key Features
 - **Bulk Phrase Removal:** Delete multiple unique phrases or lines at once.
