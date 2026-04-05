@@ -440,11 +440,6 @@
             <span data-i18n="footer-license">This project is open-source under the</span> 
             <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.
         </p>
-        <div class="footer-links">
-            <a href="https://github.com/digitrvx/content-refiner" target="_blank" rel="noopener">
-                <span data-i18n="footer-github">View on GitHub</span>
-            </a>
-        </div>
     </div>
 </footer>
 
@@ -470,6 +465,13 @@
     });
 
     function refineContent() {
+
+        const blacklistInput = document.getElementById('blacklist');
+        const blacklistValue = blacklistInput.value;
+        
+        // บันทึกค่าลง localStorage
+        localStorage.setItem('savedBlacklist', blacklistValue);
+
         const blacklist = document.getElementById('blacklist').value.split('\n').filter(line => line.trim() !== '');
         let mainContent = document.getElementById('mainContent').value;
         const resultWrapper = document.getElementById('resultWrapper');
@@ -513,6 +515,9 @@
             }, 2000);
         });
     }
+    
+    // แก้ไขฟังก์ชัน copyToClipboard และ refineContent ให้ใช้คำแปลจากภาษาที่เลือก
+    // เช่น alert(translations[currentLang]['alert-empty']);
 
     const translations = {
         en: {
@@ -535,21 +540,6 @@
             "copy-success": "Copied!",
             
             // เนื้อหาบทความฉบับภาษาอังกฤษ
-            /*"article-html": `
-                <h2>Professional Text Refining Solutions</h2>
-                <p>Welcome to <strong>Content Refiner</strong>, a sophisticated web utility designed for high-precision text manipulation. This tool empowers editors and creators to polish their writing by eliminating repetitive fragments and unwanted noise instantly.</p>
-                
-                <h3>Why Choose Content Refiner?</h3>
-                <ul>
-                    <li><strong>Efficiency:</strong> Process thousands of words in a fraction of a second.</li>
-                    <li><strong>Local Security:</strong> Your data remains in your browser; we never upload your text to any server.</li>
-                    <li><strong>Clean Output:</strong> Get a perfectly stripped version of your text, ready for publishing.</li>
-                </ul>
-
-                <h3>Getting Started</h3>
-                <p>Simply list the phrases you wish to remove in the upper box, paste your source text in the larger area, and let the algorithm do the heavy lifting for you.</p>
-            `,*/
-
             "article-html": `
                 <h2>Master Your Workflow with Content Refiner</h2>
                 <p><strong>Content Refiner</strong> is a high-performance text processing utility designed for editors, developers, and content creators who demand precision and speed. Stop wasting time on manual deletions; let our smart algorithm handle the heavy lifting.</p>
@@ -571,7 +561,7 @@
                     <li><strong>Copy:</strong> Use the "Copy Result" button to grab your cleaned text.</li>
                 </ol>
 
-                <h3>Real-World Examples</h3>
+                <h3>Examples</h3>
                 <ul>
                     <li><strong>Email Cleaning:</strong> Remove repetitive footers, "Sent from my iPhone" signatures, or disclaimer blocks from long threads.</li>
                     <li><strong>Code/Data Cleanup:</strong> Quickly strip out specific tags, log timestamps, or repetitive debug prefixes.</li>
@@ -601,27 +591,12 @@
             "copy-success": "คัดลอกแล้ว!",
             
             // เนื้อหาบทความฉบับภาษาไทย
-            /*"article-html": `
-                <h2>โซลูชันการขัดเกลาข้อความระดับมืออาชีพ</h2>
-                <p>ยินดีต้อนรับสู่ <strong>Content Refiner</strong> เครื่องมือเว็บแอปพลิเคชันที่ออกแบบมาเพื่อการจัดการข้อความที่มีความแม่นยำสูง ช่วยให้บรรณาธิการและผู้สร้างสรรค์คอนเทนต์สามารถปรับปรุงงานเขียนได้ทันที โดยการกำจัดส่วนเกินและข้อความที่ไม่ต้องการออกไป</p>
-                
-                <h3>ทำไมต้องเลือกใช้ Content Refiner?</h3>
-                <ul>
-                    <li><strong>ประสิทธิภาพสูง:</strong> ประมวลผลข้อความนับพันคำได้ในเสี้ยววินาที</li>
-                    <li><strong>ความปลอดภัยสูงสุด:</strong> ข้อมูลของคุณจะถูกเก็บไว้ในเบราว์เซอร์เท่านั้น ไม่มีการอัปโหลดเนื้อหาไปยังเซิร์ฟเวอร์ใดๆ</li>
-                    <li><strong>ผลลัพธ์ที่สะอาดตา:</strong> รับข้อความที่ผ่านการคัดกรองแล้ว พร้อมสำหรับการนำไปใช้งานหรือตีพิมพ์ต่อได้ทันที</li>
-                </ul>
-
-                <h3>เริ่มต้นใช้งาน</h3>
-                <p>เพียงระบุวลีที่ต้องการลบในกล่องด้านบน วางเนื้อหาต้นฉบับของคุณในกล่องขนาดใหญ่ และให้ระบบอัลกอริทึมจัดการส่วนที่เหลือให้คุณอย่างง่ายดาย</p>
-            `,*/
-
 
             "article-html": `
                 <h2>ยกระดับการทำงานด้วย Content Refiner</h2>
                 <p><strong>Content Refiner</strong> คือเครื่องมือจัดการข้อความประสิทธิภาพสูงที่ออกแบบมาเพื่อบรรณาธิการ นักพัฒนา และผู้สร้างสรรค์คอนเทนต์ที่ต้องการความแม่นยำและความรวดเร็ว บอกลาการไล่ลบข้อความทีละจุด แล้วปล่อยให้ระบบอัจฉริยะของเราจัดการแทนคุณ</p>
                 
-                <h3>คุณสมบัติเด่น (Key Features)</h3>
+                <h3>คุณสมบัติเด่น</h3>
                 <ul>
                     <li><strong>ลบข้อความแบบกลุ่ม:</strong> ระบุคำ วลี หรือประโยคที่ต้องการลบได้หลายรายการพร้อมกันในครั้งเดียว</li>
                     <li><strong>ประมวลผลฉับไว:</strong> อัลกอริทึมที่ปรับแต่งมาอย่างดี รองรับข้อความมหาศาลนับพันคำได้ในเสี้ยววินาที</li>
@@ -638,7 +613,7 @@
                     <li><strong>คัดลอก:</strong> กดปุ่ม "คัดลอกผลลัพธ์" เพื่อนำข้อความที่สะอาดแล้วไปใช้งานต่อได้ทันที</li>
                 </ol>
 
-                <h3>ตัวอย่างการใช้งานจริง</h3>
+                <h3>ตัวอย่างการใช้งาน</h3>
                 <ul>
                     <li><strong>จัดระเบียบอีเมล:</strong> ลบคำลงท้ายซ้ำๆ เช่น "Sent from my iPhone" หรือข้อความ Disclaimer ยาวๆ ออกจากบทสนทนา</li>
                     <li><strong>ล้างข้อมูล/โค้ด:</strong> ลบ Timestamp ใน Log ไฟล์ หรือคำนำหน้า (Prefix) ที่ซ้ำซ้อนในชุดข้อมูล</li>
@@ -670,9 +645,6 @@
             if (translations[lang][key]) el.placeholder = translations[lang][key];
         });
 
-        // Update SEO Content (Inner HTML)
-        //document.getElementById('seo-content').innerHTML = translations[lang]['seo-html'];
-
         // --- ส่วนที่ปรับปรุงใหม่: ฉีดเนื้อหาเข้า Article ---
         const articleArea = document.getElementById('article-body');
         if (articleArea) {
@@ -685,10 +657,19 @@
     document.addEventListener('DOMContentLoaded', () => {
         const savedLang = localStorage.getItem('preferredLang') || 'en';
         setLanguage(savedLang);
+
+        // --- โหลดข้อความที่ต้องการตัดออก ---
+        const savedBlacklist = localStorage.getItem('savedBlacklist');
+        if (savedBlacklist) {
+            document.getElementById('blacklist').value = savedBlacklist;
+        }
     });
 
-    // แก้ไขฟังก์ชัน copyToClipboard และ refineContent ให้ใช้คำแปลจากภาษาที่เลือก
-    // เช่น alert(translations[currentLang]['alert-empty']);
+    // บันทึกอัตโนมัติทุกครั้งที่มีการพิมพ์ในช่อง blacklist
+    document.getElementById('blacklist').addEventListener('input', (e) => {
+        localStorage.setItem('savedBlacklist', e.target.value);
+    });
+
 </script>
 
 </body>
