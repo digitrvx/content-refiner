@@ -631,6 +631,10 @@
     };
 
     function setLanguage(lang) {
+        // เปลี่ยนค่า lang ในแท็ก <html> (เพิ่มบรรทัดนี้)
+        document.documentElement.lang = lang;
+
+
         // บันทึกภาษาที่เลือกลง localStorage
         localStorage.setItem('preferredLang', lang);
         
