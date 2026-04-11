@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -404,8 +404,8 @@
 
 <div class="container">
     <div class="lang-switch">
-        <button class="lang-btn active" onclick="setLanguage('en')" id="btn-en">EN</button>
-        <button class="lang-btn" onclick="setLanguage('th')" id="btn-th">TH</button>
+        <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+        <button class="lang-btn active" onclick="setLanguage('th')" id="btn-th">TH</button>
     </div>
     <header>
         <h1 data-i18n="header-title">Content Refiner</h1>
@@ -664,7 +664,7 @@
     
     // เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเว็บ
     document.addEventListener('DOMContentLoaded', () => {
-        const savedLang = localStorage.getItem('preferredLang') || 'en';
+        const savedLang = localStorage.getItem('preferredLang') || 'th';
         setLanguage(savedLang);
 
         // --- โหลดข้อความที่ต้องการตัดออก ---
