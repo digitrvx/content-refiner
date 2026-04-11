@@ -526,6 +526,7 @@
 
     const translations = {
         en: {
+            "page-title": "Content Refiner - Free Online Bulk Text Removal Tool",
             "header-title": "Content Refiner",
             "header-desc": "The ultimate text cleaning utility for professional editors.",
             "label-blacklist": "Phrases to Remove (One per line)",
@@ -577,6 +578,7 @@
 
         },
         th: {
+            "page-title": "Content Refiner - เครื่องมือลบข้อความออนไลน์ฟรี",
             "header-title": "Content Refiner",
             "header-desc": "เครื่องมือขัดเกลาและตัดข้อความสำหรับมืออาชีพ",
             "label-blacklist": "ข้อความที่ต้องการตัดออก (หนึ่งรายการต่อบรรทัด)",
@@ -631,9 +633,13 @@
     };
 
     function setLanguage(lang) {
-        // เปลี่ยนค่า lang ในแท็ก <html> (เพิ่มบรรทัดนี้)
+        // เปลี่ยนค่า lang ในแท็ก <html> 
         document.documentElement.lang = lang;
 
+        // 2. เปลี่ยนชื่อ Title ของหน้าเว็บ 
+        if (translations[lang]["page-title"]) {
+            document.title = translations[lang]["page-title"];
+        }
 
         // บันทึกภาษาที่เลือกลง localStorage
         localStorage.setItem('preferredLang', lang);
