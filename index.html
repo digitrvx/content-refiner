@@ -428,7 +428,11 @@
         <div id="resultWrapper">
             <div class="result-title-bar">
                 <strong data-i18n="result-label">Cleaned Result:</strong>
-                <button class="copy-btn" onclick="copyToClipboard()" id="copyBtn" data-i18n="btn-copy">Copy Result</button>
+                <div style="display: flex; gap: 8px;">
+                    <!-- ปุ่มใหม่สำหรับตัดการเว้นบรรทัด -->
+                    <button class="copy-btn" onclick="removeLineBreaks()" id="removeLinesBtn" data-i18n="btn-remove-lines">Remove Empty Lines</button>
+                    <button class="copy-btn" onclick="copyToClipboard()" id="copyBtn" data-i18n="btn-copy">Copy Result</button>
+                </div>
             </div>
             <div id="output"></div>
         </div>
@@ -468,6 +472,37 @@
             // e.preventDefault(); refineContent();
         }
     });
+
+    function removeLineBreaks() {
+        const output = document.getElementById('output');
+        if (!output.innerText) return;
+
+        // ดึงข้อความออกมา
+        const originalText = output.innerText;
+
+        // .replace(/^[ \t]*[\r\n]+/gm, "") 
+        // หมายถึง: หาบรรทัดที่เริ่มต้นด้วยช่องว่างหรือ Tab (ถ้ามี) แล้วตามด้วยการขึ้นบรรทัดใหม่ 
+        // แล้วแทนที่ด้วยความว่างเปล่า (ลบทิ้ง)
+        const cleanText = originalText
+            .split('\n')              // แยกข้อความทีละบรรทัด
+            .filter(line => line.trim() !== '') // กรองเอาเฉพาะบรรทัดที่มีตัวอักษร (ไม่ว่างเปล่า)
+            .join('\n');              // รวมกลับคืนโดยคั่นด้วย 1 บรรทัดปกติ
+
+        output.innerText = cleanText;
+
+        // เอฟเฟกต์ปุ่มเมื่อกดสำเร็จ
+        const btn = document.getElementById('removeLinesBtn');
+        const currentLang = document.documentElement.lang;
+        const originalBtnText = btn.innerText;
+        
+        btn.innerText = currentLang === 'th' ? "ลบบรรทัดว่างแล้ว!" : "Empty lines removed!";
+        btn.style.background = "#d1fae5";
+        
+        setTimeout(() => {
+            btn.innerText = translations[currentLang]["btn-remove-lines"];
+            btn.style.background = "#f3f4f6";
+        }, 1500);
+    }
 
     function refineContent() {
 
@@ -535,6 +570,7 @@
             "placeholder-main": "Paste your large text here...",
             "btn-refine": "Refine Text Now",
             "result-label": "Cleaned Result:",
+            "btn-remove-lines": "Remove Empty Lines",
             "btn-copy": "Copy Result",
             "footer-rights": "All Rights Reserved.",
             "footer-license": "This project is open-source under the",
@@ -587,6 +623,7 @@
             "placeholder-main": "วางข้อความขนาดใหญ่ของคุณที่นี่...",
             "btn-refine": "ประมวลผลข้อความ",
             "result-label": "ผลลัพธ์ที่ได้:",
+            "btn-remove-lines": "ลบบรรทัดว่าง",
             "btn-copy": "คัดลอกผลลัพธ์",
             "footer-rights": "สงวนลิขสิทธิ์ตามกฎหมาย",
             "footer-license": "โปรเจกต์นี้เป็นโอเพนซอร์ซภายใต้",
